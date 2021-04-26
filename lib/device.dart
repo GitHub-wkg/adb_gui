@@ -1,8 +1,10 @@
 class Device {
-  String? id = null;
-  String? model = null;
+  late String id;
+  late String model;
+  late String status;
 
-  Device({this.id, this.model});
+
+  Device(this.id, this.model, this.status);
 
   @override
   String toString() {
