@@ -22,4 +22,3 @@ jobs:
       run: |
         flutter packages get	
         flutter build -v windows --release
-      working-directory: ${{env.GITHUB_WORKSPACE}}/
