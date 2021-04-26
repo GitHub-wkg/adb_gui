@@ -20,6 +20,6 @@ jobs:
 #     添加flutter到环境变量
     - name: add flutter to path
 #      run: echo "::add-path::${{env.GITHUB_WORKSPACE}}/flutter/bin"
-      run: echo "${{env.GITHUB_WORKSPACE}}/flutter/bin" >> $GITHUB_PATH
+      run: echo "$env:GITHUB_WORKSPACE\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
     - name: Enable desktop support
       run: flutter config --enable-windows-desktop
