@@ -17,6 +17,7 @@ jobs:
       with:	
        repository: flutter/flutter	
        ref: master
+       fetch-depth: 0
 #     添加flutter到环境变量
     - name: add flutter to path
 #      run: echo "::add-path::${{env.GITHUB_WORKSPACE}}/flutter/bin"
