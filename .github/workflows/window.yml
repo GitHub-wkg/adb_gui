@@ -3,7 +3,7 @@ name: build exe
 on:
   push:
     tags:
-      - v*
+      - 'v*'
 
 jobs:
   build:
