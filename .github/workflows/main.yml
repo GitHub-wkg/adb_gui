@@ -1,0 +1,25 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  watch:
+    types: started
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2	
+      with:	
+       repository: flutter/flutter	
+       ref: master
+#     添加flutter到环境变量
+    - name: add flutter to path
+#      run: echo "::add-path::${{env.GITHUB_WORKSPACE}}/flutter/bin"
+      run: echo "${{env.GITHUB_WORKSPACE}}/flutter/bin" >> $GITHUB_PATH
+    - name: Enable desktop support
+      run: flutter config --enable-windows-desktop
