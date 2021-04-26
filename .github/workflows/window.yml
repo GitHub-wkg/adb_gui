@@ -1,0 +1,29 @@
+name: build exe 
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+#     拉取代码
+    - uses: actions/checkout@v2
+#     拉取flutter
+    - uses: actions/checkout@v2	
+      with:	
+        repository: flutter/flutter	
+        ref: master
+#     添加flutter到环境变量
+    - name: add flutter to path
+      run: echo "::add-path::$GITHUB_WORKSPACE/flutter/bin"
+#       添加windows支持
+    - name: Enable desktop support
+      run: flutter config --enable-windows-desktop
+    - name: Build release 
+      run: |
+        flutter packages get	
+        flutter build -v windows --release
+      working-directory: ${{env.GITHUB_WORKSPACE}}/
