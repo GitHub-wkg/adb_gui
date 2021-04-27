@@ -34,7 +34,13 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8),
           itemCount: _devices.length,
           itemBuilder: (BuildContext context, int index) {
-            return DeviceItem(_devices[index]);
+            return DeviceItem(
+              device: _devices[index],
+              onTap: () {
+                debugPrint('40---home_page-----${_devices[index].id}');
+                AdbUtils.showDevice('scrcpy', ['-s', '${_devices[index].id}']);
+              },
+            );
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: _findDevices,
@@ -46,42 +52,56 @@ class _HomePageState extends State<HomePage> {
 }
 
 class DeviceItem extends StatelessWidget {
-  Device _device ;
+  final Device device;
 
-  DeviceItem(this._device);
+  final VoidCallback onTap;
+
+  const DeviceItem({Key? key, required this.device, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      height: 50,
-      child: Row(
-        children: [
-          Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: new Text(
-                    _device.model,
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                new Text(
-                  _device.id,
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: Colors.grey,
             ),
           ),
-          new Text(_device.status)
-        ],
+        ),
+        height: 50,
+        child: Row(
+          children: [
+            Expanded(
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  new Container(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: new Text(
+                      device.model,
+                      style: new TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  new Text(
+                    device.id,
+                    style: new TextStyle(
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            new Text(device.status)
+          ],
+        ),
       ),
-    );;
+    );
+    ;
   }
 }
-

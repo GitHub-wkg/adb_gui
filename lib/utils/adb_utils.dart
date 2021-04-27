@@ -38,14 +38,12 @@ class AdbUtils {
     return devices;
   }
 
-  static Future<ProcessResult> command(
-      String cmd, List<String> arguments) async {
+  static Future<ProcessResult> command(String cmd, List<String> arguments) async {
     print("cmd :${cmd} ${arguments.toString()}");
     return Process.run(cmd, arguments);
   }
 
-  static Future<ProcessResult> adbCommand(String cmd,
-      [List<String>? arguments]) async {
+  static Future<ProcessResult> adbCommand(String cmd, [List<String>? arguments]) async {
     if (arguments == null) {
       arguments = [];
     }
@@ -60,5 +58,9 @@ class AdbUtils {
     }
 
     return command("adb", arguments);
+  }
+
+  static showDevice(String cmd,  List<String> arguments) {
+    command(cmd, arguments);
   }
 }
