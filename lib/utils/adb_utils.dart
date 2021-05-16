@@ -63,4 +63,8 @@ class AdbUtils {
   static showDevice(String cmd,  List<String> arguments) {
     command(cmd, arguments);
   }
+
+  static start(){
+
+  }
 }

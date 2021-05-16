@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:adb_tools/device.dart';
+import 'package:adb_tools/page/settings_dialog.dart';
 import 'package:adb_tools/utils/adb_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +32,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("adb 工具"),
+        actions: [IconButton(onPressed: () {
+          _showSettingsDialog();
+        }, icon: Icon(Icons.settings))],
       ),
       body: ListView.builder(
           padding: const EdgeInsets.all(8),
@@ -38,7 +44,9 @@ class _HomePageState extends State<HomePage> {
               device: _devices[index],
               onTap: () {
                 debugPrint('40---home_page-----${_devices[index].id}');
-                AdbUtils.showDevice('scrcpy', ['-s', '${_devices[index].id}']);
+                AdbUtils.showDevice(
+                    'C:\\Users\\wkg\\Desktop\\tools\\scrcpy-win64\\scrcpy.exe',
+                    ['-s', '${_devices[index].id}']);
               },
             );
           }),
@@ -49,6 +57,12 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  _showSettingsDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) => SettingsDialog(),
+    );
+  }
 }
 
 class DeviceItem extends StatelessWidget {
@@ -56,7 +70,8 @@ class DeviceItem extends StatelessWidget {
 
   final VoidCallback onTap;
 
-  const DeviceItem({Key? key, required this.device, required this.onTap}) : super(key: key);
+  const DeviceItem({Key? key, required this.device, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
