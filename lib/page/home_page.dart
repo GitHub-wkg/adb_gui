@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:adb_tools/device.dart';
 import 'package:adb_tools/page/settings_dialog.dart';
+import 'package:adb_tools/settings.dart';
 import 'package:adb_tools/utils/adb_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -32,22 +33,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("adb 工具"),
-        actions: [IconButton(onPressed: () {
-          _showSettingsDialog();
-        }, icon: Icon(Icons.settings))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                _showSettingsDialog();
+              },
+              icon: Icon(Icons.settings))
+        ],
       ),
       body: ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: _devices.length,
           itemBuilder: (BuildContext context, int index) {
             return DeviceItem(
-              device: _devices[index],
-              onTap: () {
-                debugPrint('40---home_page-----${_devices[index].id}');
-                AdbUtils.showDevice(
-                    'C:\\Users\\wkg\\Desktop\\tools\\scrcpy-win64\\scrcpy.exe',
-                    ['-s', '${_devices[index].id}']);
-              },
+              _devices[index],
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -57,26 +56,29 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   _showSettingsDialog() async {
     await showDialog(
-        context: context,
-        builder: (context) => SettingsDialog(),
+      context: context,
+      builder: (context) => SettingsDialog(),
     );
   }
 }
 
-class DeviceItem extends StatelessWidget {
-  final Device device;
+class DeviceItem extends StatefulWidget {
+  Device device;
 
-  final VoidCallback onTap;
+  DeviceItem(this.device);
 
-  const DeviceItem({Key? key, required this.device, required this.onTap})
-      : super(key: key);
+  @override
+  _DeviceItemState createState() => _DeviceItemState();
+}
 
+class _DeviceItemState extends State<DeviceItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {},
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -97,14 +99,14 @@ class DeviceItem extends StatelessWidget {
                   new Container(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: new Text(
-                      device.model,
+                      widget.device.model,
                       style: new TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   new Text(
-                    device.id,
+                    widget.device.id,
                     style: new TextStyle(
                       color: Colors.grey[500],
                     ),
@@ -112,7 +114,15 @@ class DeviceItem extends StatelessWidget {
                 ],
               ),
             ),
-            new Text(device.status)
+            new Text(widget.device.status),
+            new Checkbox(
+              value: widget.device == Settings.currentDevice,
+              onChanged: (checked) {
+                if (checked == true) {
+                  Settings.currentDevice = widget.device;
+                }
+              },
+            ),
           ],
         ),
       ),

@@ -39,6 +39,7 @@ dependencies:
 #      ref: f2d8aa3
   file_picker_cross: 4.3.2
   shared_preferences: 2.0.5
+  get: 4.1.4
 
 dev_dependencies:
   flutter_test:
