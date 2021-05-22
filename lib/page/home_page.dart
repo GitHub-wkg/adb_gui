@@ -46,8 +46,11 @@ class _HomePageState extends State<HomePage> {
           itemCount: _devices.length,
           itemBuilder: (BuildContext context, int index) {
             return DeviceItem(
-              _devices[index],
-            );
+                _devices[index] == Settings.currentDevice, _devices[index], () {
+              setState(() {
+                Settings.currentDevice = _devices[index];
+              });
+            });
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: _findDevices,
@@ -65,20 +68,23 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class DeviceItem extends StatefulWidget {
-  Device device;
+class DeviceItem extends StatelessWidget {
+  final bool isChecked;
+  final Device device;
+  final Function() onTap;
 
-  DeviceItem(this.device);
+  const DeviceItem(
+    this.isChecked,
+    this.device,
+    this.onTap,
+  );
 
-  @override
-  _DeviceItemState createState() => _DeviceItemState();
-}
-
-class _DeviceItemState extends State<DeviceItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        onTap.call();
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -99,14 +105,14 @@ class _DeviceItemState extends State<DeviceItem> {
                   new Container(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: new Text(
-                      widget.device.model,
+                      device.model,
                       style: new TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  new Text(
-                    widget.device.id,
+                  Text(
+                    device.id,
                     style: new TextStyle(
                       color: Colors.grey[500],
                     ),
@@ -114,19 +120,16 @@ class _DeviceItemState extends State<DeviceItem> {
                 ],
               ),
             ),
-            new Text(widget.device.status),
-            new Checkbox(
-              value: widget.device == Settings.currentDevice,
+            Text(device.status),
+            Checkbox(
+              value: isChecked,
               onChanged: (checked) {
-                if (checked == true) {
-                  Settings.currentDevice = widget.device;
-                }
+                onTap();
               },
             ),
           ],
         ),
       ),
     );
-    ;
   }
 }
