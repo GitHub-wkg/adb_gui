@@ -24,7 +24,7 @@ jobs:
     - name: Build release 
       run: |
         flutter packages get	
-        flutter build -v windows --release
+        flutter build -v windows --release --no-sound-null-safety
     - name: Zip
       run: |
         7z a release-${{ steps.get_version.outputs.VERSION }}.zip ./build/windows/runner/Release/*
